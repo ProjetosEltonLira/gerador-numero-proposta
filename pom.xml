@@ -11,7 +11,7 @@
 	<groupId>eltonlira.portifolio</groupId>
 	<artifactId>gerador-numero-proposta</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gerador-numero-proposta</name>
+	<name>gerador-numero-propostaDTORequest</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

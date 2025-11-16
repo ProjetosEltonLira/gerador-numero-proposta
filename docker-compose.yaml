@@ -1,0 +1,24 @@
+services:
+  app1:
+    build: .
+    container_name: hazelcast-app1
+    environment:
+      - SERVER_PORT=8080
+    ports:
+      - "8080:8080"
+    networks:
+      - hazel-network
+
+  app2:
+    build: .
+    container_name: hazelcast-app2
+    environment:
+      - SERVER_PORT=8081
+    ports:
+      - "8081:8081"
+    networks:
+      - hazel-network
+
+networks:
+  hazel-network:
+    driver: bridge

@@ -1,0 +1,173 @@
+type: collection.insomnia.rest/5.0
+name: Criar numero proposta
+meta:
+  id: wrk_eb2b4ab085dd42fa87ae41c462ead065
+  created: 1763312380430
+  modified: 1763312380430
+  description: ""
+collection:
+  - name: Com docker
+    meta:
+      id: fld_c0af49b226294422b93c3b6910224702
+      created: 1763327065220
+      modified: 1763327067997
+      sortKey: -1763321855575
+      description: ""
+    children:
+      - url: http://localhost:8080/propostas
+        name: Salva pela instancia 1 8080
+        meta:
+          id: req_9ecbefd8fc754641ba97ab23f08c114b
+          created: 1763323515172
+          modified: 1763333798106
+          isPrivate: false
+          description: ""
+          sortKey: -1763327075864
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"idJornada":"{% uuid 'v4' %}"
+            }
+        parameters:
+          - id: pair_8bdb1555b259496f863fe4b5250e1697
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/propostas/1cc087e4-07e3-4eb6-ab12-3a146778513a
+        name: busca uma jornada
+        meta:
+          id: req_9c904497724944a09585c0f383bc09cf
+          created: 1763323525415
+          modified: 1763331052631
+          isPrivate: false
+          description: ""
+          sortKey: -1763327075664
+        method: GET
+        parameters:
+          - id: pair_b02b5d9619ee404eabcdf6209e0f9148
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8081/propostas
+        name: Salva pela instancia 2 8081
+        meta:
+          id: req_a243d32f1e724e50b21aa378a01735b4
+          created: 1763326642656
+          modified: 1763329755586
+          isPrivate: false
+          description: ""
+          sortKey: -1763327075764
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"idJornada":"{% uuid 'v4' %}"
+            }
+        parameters:
+          - id: pair_64eafa2556884e36996fe2d8827e5192
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/propostas
+        name: Buscar os registros ativos
+        meta:
+          id: req_762d42c99a494363955ef64d2475ea73
+          created: 1763327097423
+          modified: 1763333790862
+          isPrivate: false
+          description: ""
+          sortKey: -1763324518028
+        method: GET
+        parameters:
+          - id: pair_2e63a371d4974e658d0128fb3d9a1075
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        headers:
+          - id: pair_249b6270e93942c0b9b055b50884a97a
+            name: x-correlation-id
+            value: "{% uuid 'v4' %}"
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/propostas/sequencia-atual
+        name: Sequencia atual
+        meta:
+          id: req_ab9ede53cf734e56a1ea128fba3ed061
+          created: 1763329402475
+          modified: 1763330651403
+          isPrivate: false
+          description: ""
+          sortKey: -1763323239210
+        method: GET
+        parameters:
+          - id: pair_67eed7a6cecc4be784d01d0df5a3dc45
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_2e534a2ea03d8c284757ee9b52d73a372b5ed440
+    created: 1763312380439
+    modified: 1763312380439
+environments:
+  name: Base Environment
+  meta:
+    id: env_2e534a2ea03d8c284757ee9b52d73a372b5ed440
+    created: 1763312380437
+    modified: 1763312380437
+    isPrivate: false

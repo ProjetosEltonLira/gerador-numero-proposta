@@ -14,28 +14,31 @@ public class HazelcastConfiguration {
     public Config hazelcastConfig() {
         Config config = new Config();
 
-        config.setInstanceName("hazelcast-demo-instance");
+        config.setInstanceName("hazelcast-proposta-instance");
         config.setClusterName("meu-cluster-hazelcast");
-
         // Network / Cluster
         NetworkConfig network = config.getNetworkConfig();
         network.setPort(5701).setPortAutoIncrement(true);
 
         JoinConfig join = network.getJoin();
         join.getMulticastConfig().setEnabled(false); // desabilita multicast
-        join.getTcpIpConfig()
-                .setEnabled(true)
+//        join.getTcpIpConfig()
+//                .setEnabled(true)
+//                .addMember("127.0.0.1");// pode adicionar outros IPs se for em VMs/containers
                 // Todos os nós/hosts que podem participar do cluster.
                 // Se for tudo local, você pode usar localhost, 127.0.0.1 etc.
-                .addMember("127.0.0.1"); // pode adicionar outros IPs se for em VMs/containers
+        join.getTcpIpConfig()
+                .setEnabled(true)
+                .addMember("app1")
+                .addMember("app2");
 
-        // Configuração de um mapa distribuído específico (para @Cacheable("produtos"))
-        MapConfig produtosMapConfig = new MapConfig("produtos");
-        produtosMapConfig
-                .setTimeToLiveSeconds(60);//expira em 60 segundos
+        //Foi adicionado apenas para instrução.
+        // Configuração de um mapa distribuído específico (para @Cacheable("proposta"))
+        MapConfig mapaPropostaConfig = new MapConfig("mapa-proposta");
+        mapaPropostaConfig
+                .setTimeToLiveSeconds(30);//expira em 30 segundos
 
-        config.addMapConfig(produtosMapConfig);
-
+        config.addMapConfig(mapaPropostaConfig);
         return config;
     }
 }

@@ -1,14 +1,18 @@
 package eltonlira.portifolio.gerador_numero_proposta.controller;
 
 import com.hazelcast.core.HazelcastInstance;
-import eltonlira.portifolio.gerador_numero_proposta.model.Proposta;
+import com.hazelcast.map.IMap;
+import eltonlira.portifolio.gerador_numero_proposta.dto.Data;
+import eltonlira.portifolio.gerador_numero_proposta.dto.PropostaDTORequest;
+import eltonlira.portifolio.gerador_numero_proposta.dto.PropostaDTOResponse;
 import eltonlira.portifolio.gerador_numero_proposta.service.PropostaService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.*;
 
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("/propostas")
 public class PropostaController {
 
     private final PropostaService propostaService;
@@ -21,23 +25,55 @@ public class PropostaController {
     }
 
     // Usa o cache com @Cacheable
-    @GetMapping("/{id}")
-    public Proposta getProduto(@PathVariable Long id) {
-        return propostaService.buscarProdutoPorId(id);
+    @PostMapping
+    public ResponseEntity<Data<PropostaDTOResponse>> postProposta(
+            @RequestBody PropostaDTORequest propostaDTORequest) {
+
+        // chama o service e obtém a proposta gerada
+        PropostaDTOResponse proposta = propostaService.gerarId(propostaDTORequest);
+
+        // mapa tipado corretamente
+        Map<UUID, PropostaDTOResponse> mapa = hazelcastInstance.getMap("mapa-proposta");
+
+        // salva no Hazelcast
+        mapa.put(proposta.getIdJornada(), proposta);
+
+        // retorna usando Data
+        return ResponseEntity.ok(new Data<>(proposta));
     }
 
-    // Exemplo de uso direto do Hazelcast (mapa distribuído)
-    @PostMapping("/direto/{id}")
-    public String salvarDireto(@PathVariable Long id, @RequestParam String valor) {
-        Map<Long, String> mapa = hazelcastInstance.getMap("mapa-direto");
-        mapa.put(id, valor);
-        return "Salvo no mapa-direto: [" + id + " -> " + valor + "]";
+    @GetMapping("/{idJornada}")
+    public ResponseEntity<Data<PropostaDTOResponse>> getProposta(@PathVariable UUID idJornada) {
+
+        //Está retornando oque está no cache
+        Map<UUID, PropostaDTOResponse> mapa = hazelcastInstance.getMap("mapa-proposta");
+        var proposta = mapa.get(idJornada);
+
+        if (proposta == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(new Data<>(proposta));
     }
 
-    @GetMapping("/direto/{id}")
-    public String buscarDireto(@PathVariable Long id) {
-        Map<Long, String> mapa = hazelcastInstance.getMap("mapa-direto");
-        String valor = mapa.get(id);
-        return "Valor no mapa-direto: " + valor;
+    @GetMapping
+    public ResponseEntity<Data<List<PropostaDTOResponse>>> getPropostas() {
+
+        Map<UUID, PropostaDTOResponse> mapa = hazelcastInstance.getMap("mapa-proposta");
+
+        List<PropostaDTOResponse> lista = new ArrayList<>(mapa.values());
+
+        // Ordenação decrescente por numeroProposta
+        lista.sort(Comparator.comparing(PropostaDTOResponse::getNumeroProposta).reversed());
+
+        return ResponseEntity.ok(new Data<>(lista));
+    }
+
+    @GetMapping("/sequencia-atual")
+    public ResponseEntity<Data<IMap<String, Long>>> getSequenciaAtual() {
+
+        IMap<String, Long> mapa = hazelcastInstance.getMap("sequencia-proposta");
+
+        return ResponseEntity.ok(new Data<>(mapa));
     }
 }
